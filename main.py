@@ -3,6 +3,7 @@ from points import Point_2D, Point_3D
 from lines import Line_2D, Line_3D
 from projection import Projection
 from camera import Camera
+import math
 
 class Application:
     def __init__(self, width=800, height=600):
@@ -48,9 +49,13 @@ class Application:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
+            elif event.type == pygame.MOUSEWHEEL:
+                zoom_speed = 10
+                self.camera.position.z += -event.y * zoom_speed
 
         keys = pygame.key.get_pressed()
         move_speed = 5
+        rotation_speed = math.radians(2) 
 
         if keys[pygame.K_LEFT]:
             self.camera.position.x -= move_speed
@@ -60,6 +65,15 @@ class Application:
             self.camera.position.y += move_speed
         if keys[pygame.K_DOWN]:
             self.camera.position.y -= move_speed
+
+        if keys[pygame.K_a]:
+            self.camera.yaw -= rotation_speed
+        if keys[pygame.K_d]:
+            self.camera.yaw += rotation_speed
+        if keys[pygame.K_w]:
+            self.camera.pitch += rotation_speed
+        if keys[pygame.K_s]:
+            self.camera.pitch -= rotation_speed
 
     def draw(self):
         self.screen.fill((255, 255, 255))
